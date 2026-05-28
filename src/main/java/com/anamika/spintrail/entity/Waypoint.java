@@ -1,5 +1,9 @@
 package com.anamika.spintrail.entity;
 
+import jakarta.persistence.*;
+import lombok.*;
+import org.locationtech.jts.geom.Point;
+
 @Entity
 @Table(name = "waypoints")
 @Getter
@@ -14,9 +18,6 @@ public class Waypoint {
 
     @Column(nullable = false)
     private Integer sequenceOrder; // Order of the waypoint in the trail
-
-    @Column
-    private Integer sequenceOrder;
 
     @Column
     private String label;

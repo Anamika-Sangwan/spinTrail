@@ -3,6 +3,9 @@ package com.anamika.spintrail.entity;
 import com.anamika.spintrail.constants.enums.DifficultyLevel;
 import jakarta.persistence.*;
 import lombok.*;
+import org.locationtech.jts.geom.LineString;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Entity
 @Table(name = "trails")
