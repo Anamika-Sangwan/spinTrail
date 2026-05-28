@@ -15,6 +15,7 @@ import java.util.List;
 @Setter
 @Table(name = "route_options")
 public class RouteOption {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -22,11 +23,10 @@ public class RouteOption {
     @Column(nullable = false)
     private String routeName;
 
-    @Column(columnDefinition = "geometryType(Point,4326)", nullable = false)
+    @Column(columnDefinition = "geometry(Point,4326)", nullable = false)
     private Point startPoint;
 
-    //what gets drawn on the map
-    @Column(columnDefinition = "geometry(LineString,4326")
+    @Column(columnDefinition = "geometry(LineString,4326)")
     private LineString routePath;
 
     @Column(nullable = false)
@@ -36,10 +36,11 @@ public class RouteOption {
     private Integer estimatedDuration;
 
     @Column
-    private double elebationGain;
+    private double elevationGain;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private DifficultyLevel difficulty; //EASY, MODERATE, HARD
+    private DifficultyLevel difficulty;
 
     @OneToMany(
             mappedBy = "routeOption",
@@ -50,16 +51,16 @@ public class RouteOption {
     @OrderBy("sequenceOrder ASC")
     private List<Waypoint> waypoints = new ArrayList<>();
 
-    @Column(name = "crearted_at", updatable = false)
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @Column
     private Boolean isPopular = false;
 
     @PrePersist
-    protected void onCreate(){
+    protected void onCreate() {
         createdAt = LocalDateTime.now();
     }
 
-     public RouteOption(){}
+    public RouteOption() {}
 }

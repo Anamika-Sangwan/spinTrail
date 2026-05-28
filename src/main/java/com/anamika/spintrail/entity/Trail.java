@@ -27,7 +27,7 @@ public class Trail {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private DifficultyLevel difficulty; //EASY, MODERATE, HEIGHT
+    private DifficultyLevel difficulty; //EASY, MODERATE, HARD
 
     @Column
     private String surfaceType; //"asphalt", "gravel", "mixed"
