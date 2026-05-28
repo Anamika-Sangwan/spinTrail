@@ -1,9 +1,8 @@
-# spinTrail
-spinTrail/
+SpinTrail/
 │
 ├── backend/                          # Spring Boot Application
 │   ├── src/main/java/com/spintrail/
-│   │   ├── BicycleTrailApplication.java
+│   │   ├── spintrail.java
 │   │   │
 │   │   ├── config/
 │   │   │   ├── SecurityConfig.java
@@ -22,8 +21,7 @@ spinTrail/
 │   │   ├── repository/
 │   │   │   ├── TrailRepository.java       # JPA + PostGIS queries
 │   │   │   └── WaypointRepository.java
-|     |     |      └── RouteOptionRepository.java
-
+│   │   │   └── RouteOptionRepository.java
 │   │   │
 │   │   ├── model/
 │   │   │   ├── Trail.java                 # Trail entity
