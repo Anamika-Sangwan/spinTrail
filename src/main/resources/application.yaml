@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: SpinTrail
+  datasource:
+    url: jdbc:postgresql://localhost:5432/spintrail
+    username: postgres
+    password: Sohan$1977
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+# Add these — needed later for routing API
+routing:
+  openrouteservice:
+    api-key: YOUR_ORS_KEY_HERE
+    base-url: https://api.openrouteservice.org
+
+kind: Application
