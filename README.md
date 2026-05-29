@@ -16,70 +16,54 @@ The application uses:
 
 ```text
 SpinTrail/
+├── src/main/java/com/anamika/spintrail/
+│   ├── config/
+│   │   ├── CorsConfig.java              
+│   │   └── GlobalExceptionHandler.java  
+│   ├── controller/
+│   │   ├── LocationController.java      
+│   │   └── TrailController.java          (save endpoints added)
+│   ├── dto/
+│   │   ├── LocationSuggestionDto.java   
+│   │   ├── RouteRequestDto.java         
+│   │   └── RouteResponseDto.java        
+│   ├── entity/
+│   │   ├── RouteOption.java             
+│   │   ├── SavedRoute.java                 
+│   │   ├── Trail.java                   
+│   │   └── Waypoint.java                
+│   ├── repository/
+│   │   ├── RouteOptionRepository.java   
+│   │   ├── SavedRouteRepository.java    
+│   │   ├── TrailRepository.java         
+│   │   └── WaypointRepository.java      
+│   ├── service/
+│   │   ├── GeocodingService.java        
+│   │   ├── RoutingService.java          
+│   │   └── TrailGeneratorService.java   
+│   └── util/
+│       ├── PolylineDecoder.java         
+│       └── RouteMapper.java             
 │
-├── backend/                         # Spring Boot Application
-│   │
-│   ├── src/main/java/com/spintrail/
-│   │   │
-│   │   ├── SpinTrailApplication.java
-│   │   │
-│   │   ├── config/
-│   │   │   ├── SecurityConfig.java
-│   │   │   ├── CorsConfig.java
-│   │   │   └── MapApiConfig.java          # API keys and routing config
-│   │   │
-│   │   ├── controller/
-│   │   │   ├── TrailController.java       # Trail REST endpoints
-│   │   │   └── LocationController.java    # Geocoding/search endpoints
-│   │   │
-│   │   ├── service/
-│   │   │   ├── TrailGeneratorService.java # Circular route generation logic
-│   │   │   ├── RoutingService.java        # ORS / GraphHopper integration
-│   │   │   └── GeocodingService.java      # Address → Coordinates
-│   │   │
-│   │   ├── repository/
-│   │   │   ├── TrailRepository.java
-│   │   │   ├── WaypointRepository.java
-│   │   │   └── RouteOptionRepository.java
-│   │   │
-│   │   ├── entity/
-│   │   │   ├── Trail.java
-│   │   │   ├── RouteOption.java
-│   │   │   ├── Waypoint.java
-│   │   │   └── SavedRoute.java
-│   │   │
-│   │   └── dto/
-│   │       ├── RouteRequestDTO.java       # { lat, lng, desiredDistance }
-│   │       └── RouteResponseDTO.java      # Generated route response
-│   │
-│   ├── src/main/resources/
-│   │   ├── application.yml
-│   │   └── db/migration/                  # Flyway migrations
-│   │       ├── V1__init_postgis.sql
-│   │       └── V2__create_trails_table.sql
-│   │
-│   └── pom.xml
-│
-├── frontend/                              # React Application
-│   │
+├── frontend/
 │   ├── src/
-│   │   │
 │   │   ├── components/
-│   │   │   ├── MapView/                   # Leaflet/Mapbox map component
-│   │   │   ├── RouteSelector/             # Route option cards
-│   │   │   ├── LocationSearch/            # Search/autocomplete
-│   │   │   └── RouteDetails/              # Distance/elevation/duration
-│   │   │
+│   │   │   ├── LocationSearch/          
+│   │   │   ├── MapView/                 
+│   │   │   ├── RouteCard/                (save button added)
+│   │   │   └── Sidebar/                 
 │   │   ├── services/
-│   │   │   └── apiService.js              # Axios API calls
-│   │   │
-│   │   ├── store/                         # Redux/Zustand state management
-│   │   │
-│   │   └── App.jsx
-│   │
-│   └── package.json
+│   │   │   └── apiService.js             (save calls added)
+│   │   ├── App.js                        (edge cases handled)
+│   │   ├── App.css                      
+│   │   └── index.js                     
+│   ├── .env                             
+│   ├── .env.production                  
+│   └── package.json                     
 │
-└── docker-compose.yml                     # PostgreSQL + PostGIS container
+├── docker-compose.yml                   
+├── init.sql                             
+└── pom.xml                              
 ```
 
 ---

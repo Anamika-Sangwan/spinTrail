@@ -3,7 +3,9 @@ package com.anamika.spintrail.controller;
 import com.anamika.spintrail.dto.RouteRequestDto;
 import com.anamika.spintrail.dto.RouteResponseDto;
 import com.anamika.spintrail.entity.RouteOption;
+import com.anamika.spintrail.entity.SavedRoute;
 import com.anamika.spintrail.repository.RouteOptionRepository;
+import com.anamika.spintrail.repository.SavedRouteRepository;
 import com.anamika.spintrail.service.RoutingService;
 import com.anamika.spintrail.service.TrailGeneratorService;
 import com.anamika.spintrail.util.RouteMapper;
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/trails")
@@ -20,14 +23,16 @@ public class TrailController {
     private final TrailGeneratorService trailGeneratorService;
     private final RoutingService routingService;
     private final RouteOptionRepository routeOptionRepository;
+    private final SavedRouteRepository savedRouteRepository;
 
     public TrailController(
             TrailGeneratorService trailGeneratorService,
             RoutingService routingService,
-            RouteOptionRepository routeOptionRepository) {
+            RouteOptionRepository routeOptionRepository, SavedRouteRepository savedRouteRepository) {
         this.trailGeneratorService = trailGeneratorService;
         this.routingService = routingService;
         this.routeOptionRepository = routeOptionRepository;
+        this.savedRouteRepository = savedRouteRepository;
     }
 
     // ─── Generate Routes ───────────────────────────────────────────────────
@@ -88,5 +93,59 @@ public class TrailController {
                 routeOptionRepository.findRouteOptionsNearLocation(lat, lng, radius);
 
         return ResponseEntity.ok(RouteMapper.toDtoList(routes));
+    }
+
+    // ── Save a route ───────────────────────────────────────────────────────
+// POST /api/trails/save/42
+    @PostMapping("/save/{routeId}")
+    public ResponseEntity<Map<String, Object>> saveRoute(
+            @PathVariable Long routeId,
+            @RequestParam(defaultValue = "My saved route") String label) {
+        return routeOptionRepository.findById(routeId)
+                .map(route -> {
+                    // Don't save duplicates
+                    if (savedRouteRepository.existsByRouteOptionId(routeId)) {
+                        return ResponseEntity.ok(
+                                Map.<String, Object>of(
+                                        "saved", true,
+                                        "message", "Already saved"
+                                )
+                        );
+                    }
+                    SavedRoute saved = new SavedRoute();
+                    saved.setRouteOption(route);
+                    saved.setUserLabel(label);
+                    savedRouteRepository.save(saved);
+
+                    return ResponseEntity.ok(
+                            Map.<String, Object>of(
+                                    "saved", true,
+                                    "message", "Route saved"
+                            )
+                    );
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // ── Unsave a route ─────────────────────────────────────────────────────
+// DELETE /api/trails/save/42
+    @DeleteMapping("/save/{routeId}")
+    public ResponseEntity<Map<String, Object>> unsaveRoute(
+            @PathVariable Long routeId) {
+
+        savedRouteRepository.deleteByRouteOptionId(routeId);
+        return ResponseEntity.ok(Map.of("saved", false, "message", "Route removed"));
+    }
+
+    // ── Get all saved routes ───────────────────────────────────────────────
+// GET /api/trails/saved
+    @GetMapping("/saved")
+    public ResponseEntity<List<RouteResponseDto>> getSavedRoutes() {
+        List<RouteOption> saved = savedRouteRepository
+                .findAllByOrderBySavedAtDesc()
+                .stream()
+                .map(SavedRoute::getRouteOption)
+                .toList();
+        return ResponseEntity.ok(RouteMapper.toDtoList(saved));
     }
 }
