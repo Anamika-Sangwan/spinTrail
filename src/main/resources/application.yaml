@@ -18,7 +18,13 @@ spring:
 # Add these — needed later for routing API
 routing:
   openrouteservice:
-    api-key: YOUR_ORS_KEY_HERE
-    base-url: https://api.openrouteservice.org
+    api-key: eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImI1YTYzMzk2MDc5MjQ2MjI5ZDUxYjRiZDQwNGZkZWM5IiwiaCI6Im11cm11cjY0In0=
+    base-url: https://api.openrouteservice.org/v2/directions/cycling-regular
+
+geocoding:
+  nominatim:
+    base-url: https://nominatim.openstreetmap.org/search
+    # Nominatim requires a User-Agent identifying your app — mandatory
+    user-agent: SpinTrail/1.0
 
 kind: Application
