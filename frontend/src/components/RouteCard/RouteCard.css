@@ -1,0 +1,138 @@
+.route-card {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 10px;
+  padding: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.1s;
+  position: relative;
+}
+
+.route-card:hover {
+  border-color: #b0cfe8;
+  box-shadow: 0 2px 8px rgba(55, 138, 221, 0.1);
+}
+
+.route-card:active {
+  transform: scale(0.98);
+}
+
+/* ── Selected state ── */
+.route-card.selected {
+  border: 2px solid #378ADD;
+  background: #f0f7ff;
+}
+
+.route-card.selected .route-name {
+  color: #185FA5;
+}
+
+/* ── Color bar on left edge — matches the route color on the map ── */
+.route-color-bar {
+  position: absolute;
+  left: 0;
+  top: 10px;
+  bottom: 10px;
+  width: 4px;
+  border-radius: 0 4px 4px 0;
+}
+
+/* ── Top row: name + difficulty badge ── */
+.route-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  padding-left: 10px;     /* space for the color bar */
+}
+
+.route-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #222;
+}
+
+.difficulty-badge {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 9px;
+  border-radius: 20px;
+  flex-shrink: 0;
+}
+
+.badge-easy {
+  background: #eaf3de;
+  color: #3B6D11;
+}
+
+.badge-moderate {
+  background: #faeeda;
+  color: #854F0B;
+}
+
+.badge-hard {
+  background: #fcebeb;
+  color: #A32D2D;
+}
+
+/* ── Stats row: distance, duration, elevation ── */
+.route-stats {
+  display: flex;
+  gap: 0;
+  padding-left: 10px;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 10px;
+  margin-top: 2px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  gap: 3px;
+}
+
+.stat-item:not(:last-child) {
+  border-right: 1px solid #f0f0f0;
+}
+
+.stat-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: #222;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ── Loading skeleton — shown while routes are being fetched ── */
+.route-card-skeleton {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 10px;
+  padding: 14px;
+  overflow: hidden;
+}
+
+.skeleton-line {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: 4px;
+  height: 14px;
+  margin-bottom: 10px;
+}
+
+.skeleton-line.short { width: 40%; }
+.skeleton-line.medium { width: 65%; }
+.skeleton-line.full { width: 100%; }
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
