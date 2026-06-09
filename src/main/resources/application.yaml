@@ -1,11 +1,13 @@
 spring:
   application:
     name: SpinTrail
+
   datasource:
     url: jdbc:postgresql://localhost:5432/spintrail
-    username: postgres
-    password: Sohan$1977
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -15,16 +17,12 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
-# Add these — needed later for routing API
 routing:
   openrouteservice:
-    api-key: eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImI1YTYzMzk2MDc5MjQ2MjI5ZDUxYjRiZDQwNGZkZWM5IiwiaCI6Im11cm11cjY0In0=
-    base-url: https://api.openrouteservice.org/v2/directions/cycling-regular
+    api-key: ${ORS_API_KEY}
+    base-url: ${ORS_BASE_URL}
 
 geocoding:
   nominatim:
-    base-url: https://nominatim.openstreetmap.org/search
-    # Nominatim requires a User-Agent identifying your app — mandatory
-    user-agent: SpinTrail/1.0
-
-kind: Application
+    base-url: ${NOMINATIM_BASE_URL}
+    user-agent: ${NOMINATIM_USER_AGENT}
