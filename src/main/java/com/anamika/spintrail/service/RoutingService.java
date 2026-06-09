@@ -8,10 +8,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.LineString;
-import org.locationtech.jts.geom.PrecisionModel;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -22,9 +18,6 @@ import java.util.List;
 
 @Service
 public class RoutingService {
-
-    private static final GeometryFactory GEOMETRY_FACTORY =
-            new GeometryFactory(new PrecisionModel(), 4326);
 
     private final RestClient restClient;
     private final ObjectMapper objectMapper;
@@ -87,18 +80,18 @@ public class RoutingService {
         JsonNode summary = route.path("summary");
         double distanceMetres = summary.path("distance").asDouble();
         double durationSeconds = summary.path("duration").asDouble();
-
         // 6. Decode the polyline geometry into a JTS LineString
         String encodedGeometry = route.path("geometry").asText();
-        List<double[]> decodedPoints = PolylineDecoder.decode(encodedGeometry);
-        Coordinate[] coordinates = PolylineDecoder.toJtsCoordinates(decodedPoints);
-        LineString routePath = GEOMETRY_FACTORY.createLineString(coordinates);
-
-        // 7. Write real data back into the RouteOption
-        candidate.setRoutePath(routePath);
-        candidate.setTotalDistance(distanceMetres / 1000.0);  // convert to km
-        candidate.setEstimatedDuration((int)(durationSeconds / 60.0)); // convert to mins
-        candidate.setDifficulty(determineDifficulty(distanceMetres / 1000.0));
+        List<double[]> decodedPoints =
+                PolylineDecoder.decode(encodedGeometry);
+        String routePathJson =
+                objectMapper.writeValueAsString(decodedPoints);
+        candidate.setRoutePath(routePathJson);
+        candidate.setTotalDistance(distanceMetres / 1000.0);
+        candidate.setEstimatedDuration((int)(durationSeconds / 60.0));
+        candidate.setDifficulty(
+                determineDifficulty(distanceMetres / 1000.0)
+        );
 
         return candidate;
     }
