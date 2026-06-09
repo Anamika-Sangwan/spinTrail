@@ -13,8 +13,11 @@ public class Waypoint {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(columnDefinition = "geometry(Point,4326)", nullable = false)
-    private Point location;
+    @Column(nullable = false)
+    private Double latitude;
+
+    @Column(nullable = false)
+    private Double longitude;
 
     @Column(nullable = false)
     private Integer sequenceOrder; // Order of the waypoint in the trail

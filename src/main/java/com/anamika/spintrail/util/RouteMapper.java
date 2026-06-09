@@ -2,25 +2,30 @@ package com.anamika.spintrail.util;
 
 import com.anamika.spintrail.dto.RouteResponseDto;
 import com.anamika.spintrail.entity.RouteOption;
-import com.anamika.spintrail.entity.Waypoint;
-import org.locationtech.jts.geom.Coordinate;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class RouteMapper {
 
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+
     // Convert a RouteOption entity → RouteResponseDto for the frontend
     public static RouteResponseDto toDto(RouteOption route) {
 
-        // Extract route path coordinates from the LineString geometry
+        // Extract route path coordinates from stored JSON string
         List<double[]> routeCoordinates = List.of();
+
         if (route.getRoutePath() != null) {
-            routeCoordinates = Arrays.stream(
-                            route.getRoutePath().getCoordinates()
-                    )
-                    .map(c -> new double[]{c.y, c.x})   // back to [lat, lng] for frontend
-                    .toList();
+            try {
+                routeCoordinates = objectMapper.readValue(
+                        route.getRoutePath(),
+                        new TypeReference<List<double[]>>() {}
+                );
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         // Convert Waypoint entities → WaypointDtos
@@ -28,8 +33,8 @@ public class RouteMapper {
                 .stream()
                 .sorted((a, b) -> a.getSequenceOrder() - b.getSequenceOrder())
                 .map(wp -> new RouteResponseDto.WaypointDto(
-                        wp.getLocation().getY(),    // lat
-                        wp.getLocation().getX(),    // lng
+                        wp.getLatitude(),      // lat
+                        wp.getLongitude(),     // lng
                         wp.getSequenceOrder(),
                         wp.getLabel()
                 ))
@@ -39,16 +44,24 @@ public class RouteMapper {
                 route.getId(),
                 route.getRouteName(),
                 route.getTotalDistance(),
-                route.getEstimatedDuration() != null ? route.getEstimatedDuration() : 0,
-                route.getDifficulty() != null ? route.getDifficulty().name() : "UNKNOWN",
-                route.getStartPoint().getY(),   // startLat
-                route.getStartPoint().getX(),   // startLng
+                route.getEstimatedDuration() != null
+                        ? route.getEstimatedDuration()
+                        : 0,
+                route.getDifficulty() != null
+                        ? route.getDifficulty().name()
+                        : "UNKNOWN",
+
+                route.getStartLatitude(),     // startLat
+                route.getStartLongitude(),    // startLng
+
                 routeCoordinates,
                 waypointDtos
         );
     }
 
     public static List<RouteResponseDto> toDtoList(List<RouteOption> routes) {
-        return routes.stream().map(RouteMapper::toDto).toList();
+        return routes.stream()
+                .map(RouteMapper::toDto)
+                .toList();
     }
 }

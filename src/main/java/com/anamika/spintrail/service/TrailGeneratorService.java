@@ -3,10 +3,6 @@ package com.anamika.spintrail.service;
 import com.anamika.spintrail.dto.RouteRequestDto;
 import com.anamika.spintrail.entity.RouteOption;
 import com.anamika.spintrail.entity.Waypoint;
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.Point;
-import org.locationtech.jts.geom.PrecisionModel;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +10,6 @@ import java.util.List;
 
 @Service
 public class TrailGeneratorService {
-    private static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory(new PrecisionModel(), 4326);
     private static final double EARTH_RADIUS_METRES = 6_371_000.0;
 
     public List<RouteOption> generateCandidateRoutes(RouteRequestDto request) {
@@ -93,19 +88,15 @@ public class TrailGeneratorService {
         routeOption.setRouteName(routeName);
         routeOption.setTotalDistance(estimatedDistanceKm);  // placeholder until ORS confirms real distance
         // Set start point as PostGIS geometry
-        Point startPoint = GEOMETRY_FACTORY.createPoint(
-                new Coordinate(startLng, startLat)  // NOTE: JTS is (lng, lat) not (lat, lng)
-        );
-        routeOption.setStartPoint(startPoint);
+        routeOption.setStartLatitude(startLat);
+        routeOption.setStartLongitude(startLng);
         // Build ordered Waypoint entities
         List<Waypoint> waypoints = new ArrayList<>();
         for (int i = 0; i < waypointCoords.size(); i++) {
             double[] coord = waypointCoords.get(i);
             Waypoint waypoint = new Waypoint();
-            Point location = GEOMETRY_FACTORY.createPoint(
-                    new Coordinate(coord[1], coord[0])  // (lng, lat)
-            );
-            waypoint.setLocation(location);
+            waypoint.setLatitude(coord[0]);
+            waypoint.setLongitude(coord[1]);
             waypoint.setSequenceOrder(i);
             waypoint.setRouteOption(routeOption);
             // Label first and last waypoints
@@ -124,8 +115,8 @@ public class TrailGeneratorService {
         return routeOption.getWaypoints().stream()
                 .sorted((a, b) -> a.getSequenceOrder() - b.getSequenceOrder())
                 .map(wp -> new double[]{
-                        wp.getLocation().getY(),   // lat  (JTS stores as Y)
-                        wp.getLocation().getX()    // lng  (JTS stores as X)
+                        wp.getLatitude(),
+                        wp.getLongitude()
                 })
                 .toList();
     }
