@@ -18,7 +18,8 @@ public class CorsConfig {
         // In production replace with your actual frontend domain
         config.setAllowedOrigins(List.of(
                 "http://localhost:3000",
-                "http://localhost:8080"
+                "http://localhost:8080",
+                "https://spintrail-frontend.onrender.com"
         ));
 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
