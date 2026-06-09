@@ -26,7 +26,7 @@ SpinTrail/
 │   ├── dto/
 │   │   ├── LocationSuggestionDto.java   
 │   │   ├── RouteRequestDto.java         
-│   │   └── RouteResponseDto.java        
+│   │   └── RouteResponseDto.java             
 │   ├── entity/
 │   │   ├── RouteOption.java             
 │   │   ├── SavedRoute.java                 
@@ -150,3 +150,5 @@ npm run dev
 * AI-based route recommendations
 * Weather integration
 * Social sharing features
+* Redis Cache
+* Session Management
