@@ -26,8 +26,8 @@ public class RouteOption {
     @Column(columnDefinition = "geometry(Point,4326)", nullable = false)
     private Point startPoint;
 
-    @Column(columnDefinition = "geometry(LineString,4326)")
-    private LineString routePath;
+    @Column(columnDefinition = "TEXT")
+    private String routePath;
 
     @Column(nullable = false)
     private Double totalDistance;

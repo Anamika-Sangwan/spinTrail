@@ -22,8 +22,8 @@ public class Trail {
     @Column(nullable = false)
     private double distance;
 
-    @Column(columnDefinition = "geometry(LineString,4326)")
-    private LineString path;
+    @Column(columnDefinition = "TEXT")
+    private String path;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
