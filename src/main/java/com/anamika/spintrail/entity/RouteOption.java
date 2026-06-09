@@ -3,8 +3,6 @@ package com.anamika.spintrail.entity;
 import com.anamika.spintrail.constants.enums.DifficultyLevel;
 import jakarta.persistence.*;
 import lombok.*;
-import org.locationtech.jts.geom.LineString;
-import org.locationtech.jts.geom.Point;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,8 +21,11 @@ public class RouteOption {
     @Column(nullable = false)
     private String routeName;
 
-    @Column(columnDefinition = "geometry(Point,4326)", nullable = false)
-    private Point startPoint;
+    @Column(nullable = false)
+    private Double startLatitude;
+
+    @Column(nullable = false)
+    private Double startLongitude;
 
     @Column(columnDefinition = "TEXT")
     private String routePath;
