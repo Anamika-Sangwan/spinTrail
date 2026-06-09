@@ -82,15 +82,10 @@ SpinTrail/
 ## Frontend
 
 * React
-* Leaflet / Mapbox
-* Axios
-* Redux or Zustand
 
 ## APIs
 
 * OpenRouteService
-* GraphHopper
-* Nominatim / Geocoding API
 
 ---
 
